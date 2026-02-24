@@ -6,17 +6,6 @@
 
 <div class="example-wrapper">
     <h1>Hello !</h1>
-
-        <ul>
-        {% for nameStudent in namesStudents %}
-        <li> {{nameStudent|upper}} </li>
-        {% if age > 18 %}
-            Vous êtes majeur
-            {% else %}
-                Vous êtes mineur
-        {% endif %}
-        {% endfor %}
-        </ul>
 </div>
 
 {% endblock %}
