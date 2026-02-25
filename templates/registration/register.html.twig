@@ -4,20 +4,23 @@
 
 {% block body %}
     <div class="containerRegister" >
-        <h1>Register</h1>
-
+        <h1 class="mb-4">Register</h1>
         {{ form_errors(registrationForm) }}
 
         {{ form_start(registrationForm) }}
-            {{ form_row(registrationForm.email) }}
-            {{ form_row(registrationForm.firstname) }}
-            {{ form_row(registrationForm.lastname) }}
-            {{ form_row(registrationForm.plainPassword, {
-                label: 'Password'
+            {{ form_widget(registrationForm.email,{
+                'attr':{'class': 'mb-3','placeholder': 'Email'}
             }) }}
-            {{ form_row(registrationForm.agreeTerms) }}
+            {{ form_widget(registrationForm.firstname,{'attr':{'class': 'mb-3', 'placeholder': 'Nom'}
+            }) }}
+            {{ form_widget(registrationForm.lastname ,{'attr':{'class': 'mb-3', 'placeholder': 'Prénom'}
+            }) }}
+            {{ form_widget(registrationForm.plainPassword, {
+               'attr':{'class':'mb-3','placeholder': 'Mot de passe'}
+            }) }}
+            {{ form_widget(registrationForm.agreeTerms, {'label': "Veuillez accepter les conditons d'utilisation"}) }}
 
-            <button type="submit" class="btn btn-success">Register</button>
+            <button type="submit" class="btn btn-success mt-4">Register</button>
         {{ form_end(registrationForm) }}
     </div>
 {% endblock %}
