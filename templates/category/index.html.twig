@@ -15,7 +15,7 @@
 				<tr>
 					<td>{{ category.name }}</td>
 					<td>
-						<a class="btn btn-warning" href="{{ path('app_category_update', {'id': category.id}) }}">
+						<a class="btn btn-outline-warning" href="{{ path('app_category_update', {'id': category.id}) }}">
 							Modifier
 						</a>
 						<a class="btn btn-danger" href="{{ path('app_category_delete', {'id': category.id}) }}">Supprimer</a>
@@ -27,5 +27,5 @@
 				</tr>
 			{% endfor %}
 	</table>
-	<a class="btn btn-info" href="{{ path('app_category_new') }}">Ajouter une catégorie</a>
+	<a class="btn btn-success" href="{{ path('app_category_new') }}">Ajouter une catégorie</a>
 {% endblock %}
