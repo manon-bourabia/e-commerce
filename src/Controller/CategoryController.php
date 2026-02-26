@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Category;
 use App\Form\CategoryFormType;
-use App\Repository\CategoryRepository;
+use App\Repository\CategoriesRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
@@ -14,11 +14,12 @@ use Symfony\Component\Routing\Attribute\Route;
 final class CategoryController extends AbstractController
 {
     #[Route('/category', name: 'app_category')]
-    public function index(CategoryRepository $categoryRepository): Response
+    public function index(CategoriesRepository $categoriesRepository): Response
     {
-        $category = $categoryRepository->findAll();
+        $categories = $categoriesRepository->findAll();
+        
         return $this->render('category/index.html.twig', [
-            'category' => $category,
+            'categories' => $categories,
         ]);
     }
     #[Route('/category/new', name: 'app_category_new')]
@@ -38,7 +39,7 @@ final class CategoryController extends AbstractController
         ]);
     }
     #[Route('/category/update/{id}', name: 'app_category_update')]
-    public function update(Category $category, Request $request, EntityManagerInterface $entityManager): Response
+    public function updateCategory(Category $category, Request $request, EntityManagerInterface $entityManager): Response
     {
         $form = $this->createForm(CategoryFormType::class, $category);
         $form->handleRequest($request);
