@@ -5,27 +5,29 @@
 
 {% block body %}
 	<h1>Liste des catégories</h1>
-
+	{% include 'layouts/_flash_message.html.twig'%}
 	<table class='table'>
 		<tr>
 			<th>Nom de la catégorie</th>
 			<th>Actions</th>
 		</tr>
-			{% for category in categories %}
-				<tr>
-					<td>{{ category.name }}</td>
-					<td>
-						<a class="btn btn-outline-warning" href="{{ path('app_category_update', {'id': category.id}) }}">
-							Modifier
-						</a>
-						<a class="btn btn-danger" href="{{ path('app_category_delete', {'id': category.id}) }}">Supprimer</a>
-					</td>
-				</tr>
-			{% else %}
-				<tr>
-					<td colspan="2">Aucune catégorie enregistrée.</td>
-				</tr>
-			{% endfor %}
+		{% for category in categories %}
+			<tr>
+				<td>{{ category.name }}</td>
+				<td>
+					<a class="btn btn-outline-warning" href="{{ path('app_category_update', {'id': category.id}) }}">
+						Modifier
+					</a>
+					<a onclick="return confirm('Êtes-vous sûr de vouloir supprimer cette catégorie ?')" class="btn btn-danger" href="{{ path("app_category_delete", {"id": category.id}) }}">Supprimer</a>
+
+				</td>
+			</tr>
+		{% else %}
+			<tr>
+				<td colspan="2">Aucune catégorie enregistrée.</td>
+			</tr>
+		{% endfor %}
 	</table>
+	<a href=""></a>
 	<a class="btn btn-success" href="{{ path('app_category_new') }}">Ajouter une catégorie</a>
 {% endblock %}
