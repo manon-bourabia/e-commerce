@@ -4,8 +4,9 @@
         <div class="form">
         <h2>Ajoutez une catégorie</h2>
         {{ form_start(form)}}
-        {{ form_row(form.name, {'attr':{'class':'form form-control'}}) }}
-        <input type="submit" value="sauvegarder" class="btn btn-success mt-4">
+        {{ form_row(form.name, {'attr':{'class':'form-control'}}) }}
+        <input type="submit" value="sauvegarder" class="btn btn-primary mt-4">
+        {{form_end(form)}}
         </div>
     </div>
 {% endblock %}
