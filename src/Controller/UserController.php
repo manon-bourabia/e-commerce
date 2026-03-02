@@ -35,4 +35,15 @@ final class UserController extends AbstractController
         
         return $this->redirectToRoute('app_user');
     }
+    #[Route('/admin/user/{id}/remove/', name: 'app_user_remove')]
+    public function userRemove(EntityManagerInterface $entityManager, $id, UserRepository $userRepository): Response
+    {
+        $user =$userRepository->find($id);
+        $entityManager->remove($user);
+        $entityManager->flush();
+        
+        $this->addFlash('danger', "L'utilisateur à bien été supprimé.");
+        
+        return $this->redirectToRoute('app_user');
+    }
 }

@@ -39,7 +39,7 @@
 							{% else %}
 								<a onclick="return confirm('Voulez vous vraiment retirer le rôle à cet utilisateur ?')" href="{{ path('app_user_remove_editor_role', {'id':user.id}) }}" class="btn btn-outline-warning">Retirer le rôle éditeur</a>
 							{% endif %}
-							<a href="#" class="btn btn-danger">Supprimer</a>
+							<a href="{{ path('app_user_remove', {'id':user.id}) }}" class="btn btn-danger">Supprimer</a>
 						{% endif %}
 					</td>
 				</tr>
