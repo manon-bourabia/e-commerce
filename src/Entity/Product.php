@@ -31,6 +31,9 @@ class Product
     #[ORM\ManyToMany(targetEntity: SubCategory::class, inversedBy: 'product')]
     private Collection $SubCategory;
 
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $image = null;
+
     public function __construct()
     {
         $this->SubCategory = new ArrayCollection();
@@ -58,7 +61,7 @@ class Product
         return $this->Description;
     }
 
-    public function setDescription(string $Description): static
+    public function setDescription(?string $Description): static
     {
         $this->Description = $Description;
 
@@ -97,6 +100,18 @@ class Product
     public function removeSubCategory(SubCategory $subCategory): static
     {
         $this->SubCategory->removeElement($subCategory);
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(?string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }
