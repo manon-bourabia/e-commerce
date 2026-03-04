@@ -1,11 +1,26 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Accueil{% endblock %}
+{% block title %}Accueil
+{% endblock %}
 
 {% block body %}
 
-<div class="example-wrapper">
-    <h1>Hello !</h1>
-</div>
+	<div class="container">
+		<h1 class="mb-5 mt-5">Produits</h1>
+		<div class="row">
+			{% for product in products %}
+				<div class="col-md-3">
+					<div class="card" style="width: 18rem;">
+						<img src="{{ asset('images/'~product.image)}}" class="imgproduct card-img-top" alt="Card image cap">
+						<div class="card-body">
+							<a href="{{ path('app_home_product_show', {'id':product.id}) }}"><h5 class="card-title titleProduct">{{ product.Name }}</h5></a>
+							<p class="card-text">{{ product.Description|slice(0,60) }}</p>
+							<a href="#" class="btn btn-outline-success">Ajouter au panier</a>
+						</div>
+					</div>
+				</div>
+			{% endfor %}
+		</div>
+	</div>
 
 {% endblock %}

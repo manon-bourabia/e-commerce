@@ -31,7 +31,7 @@
 
     <a class="btn btn-outline-warning" href="{{ path('app_product_edit', {'id': product.id}) }}">Modifier</a>
 
-    <a href="{{ path('app_product_stock_add_history', {'id': product.id}) }}">Afficher l'historique de stock</a>
+    <a class="btn btn-outline-primary" href="{{ path('app_product_stock_add_history', {'id': product.id}) }}">Afficher l'historique de stock</a>
 
     {{ include('product/_delete_form.html.twig') }}
 </div>
