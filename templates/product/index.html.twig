@@ -38,13 +38,13 @@
 						<td>
 							<a class="btn btn-outline-info" href="{{ path('app_product_show', {'id': product.id}) }}">Voir</a>
 							<a class="btn btn-outline-warning" href="{{ path('app_product_edit', {'id': product.id}) }}">Modifier</a>
-							<a class="btn btn-outline-success" href="">Ajouter du stock</a>
+							<a class="btn btn-outline-success" href="{{ path('app_product_stock_add', {'id': product.id}) }}">Ajouter du stock</a>
 							<a class="btn btn-danger" href="{{ path('app_product_delete', {'id': product.id}) }}">Supprimer</a>
 						</td>
 					</tr>
 				{% else %}
 					<tr>
-						<td colspan="5">no records found</td>
+						<td colspan="5">aucun élement enregistré</td>
 					</tr>
 				{% endfor %}
 			</tbody>
