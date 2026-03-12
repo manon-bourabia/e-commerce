@@ -5,9 +5,11 @@
 
 {% block body %}
 	<div class="container">
+	<br>
+	<br>
 		<div class="card mb-12">
 			<div class="row g-0">
-				<div class="col-md-4">
+				<div class="col-md-3 mt-3">
 					<img src="{{ asset('images/'~product.image) }}" class="img-fluid rounded-start" alt="">
 				</div>
 				<div class="col-md-8">
@@ -22,6 +24,7 @@
 				</div>
 			</div>
 		</div>
+		<br><br><br>
         <h2>Derniers produits ajoutés</h2>
         <div class="row">
 			{% for product in products %}
