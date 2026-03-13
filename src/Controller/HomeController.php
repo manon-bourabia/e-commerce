@@ -12,12 +12,13 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET'])]
-    public function index(ProductRepository $productRepository): Response
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
         $products = $productRepository->findAll(); 
         
         return $this->render('home/index.html.twig', [
-            'products'=>$products
+            'products'=>$products,
+            'categories'=>$categoryRepository->findAll(),
         ]);
     }
     #[Route('/product/{id}/show', name: 'app_home_product_show', methods: ['GET'])]
