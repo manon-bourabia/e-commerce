@@ -18,7 +18,7 @@
 						<p>{{ product.description }}</p>
 						<h3>{{ product.price }}
 								€</h3>
-						<a href="" class="btn btn-outline-success">Ajouter au panier</a>
+						<a href="{{ path('app_cart_new',{'id':product.id}) }}" class="btn btn-outline-success">Ajouter au panier</a>
 						<p class="card-text">
 							<small class="text-body-secondary">Last updates 3 min ago</small>
 						</p>

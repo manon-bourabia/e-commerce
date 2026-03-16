@@ -19,7 +19,7 @@
 							<p class="card-text">{{ product.Description|slice(0,60) }}</p>
 							<h3>{{ product.price }}
 								€</h3>
-							<a href="#" class="btn btn-outline-success">Ajouter au panier</a>
+							<a href="{{ path('app_cart_new',{'id':product.id}) }}" class="btn btn-outline-success">Ajouter au panier</a>
 						</div>
 					</div>
 				</div>
