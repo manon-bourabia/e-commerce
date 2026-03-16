@@ -36,7 +36,7 @@ final class HomeController extends AbstractController
     #[Route('product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
     public function filter($id, SubCategoryRepository $subCategoryRepository): Response
     {
-        $products = $subCategoryRepository->find($id)->getProducts();
+        $products = $subCategoryRepository->find($id)->getProduct();
         return $this->render('home/filter.html.twig', [
             'products'=>$products,
         ]);
