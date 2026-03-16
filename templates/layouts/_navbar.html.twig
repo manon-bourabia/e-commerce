@@ -84,21 +84,21 @@
 					Compte
 				</a>
 				<ul class="dropdown-menu">
+				{% if app.user == false %}
 					<li>
 						<a class="dropdown-item" href="{{path('app_login')}}">Se connecter</a>
 					</li>
+					<li><hr class="dropdown-divider"></li>
+					<li>
+						<a class="dropdown-item" href="{{path('app_register')}}">S'inscrire</a>
+					</li>
+					<li><hr class="dropdown-divider"></li>
+					{% endif %}
 					<li>
 						<a class="dropdown-item" href="{{path('app_logout')}}">Déconnexion</a>
 					</li>
-					<li><hr class="dropdown-divider"></li>
-					<li>
-						<a class="dropdown-item" href="{{path('app_register')}}">Créer mon compte</a>
-					</li>
 				</ul>
 			</li>
-			<!-- <li class="nav-item">
-						          <a class="nav-link disabled" aria-disabled="true">Commande</a>
-						        </li> -->
 		</ul>
 		<form class="d-flex" role="search">
 			<input class="form-control me-2" type="search" placeholder="Search" aria-label="Search"/>
