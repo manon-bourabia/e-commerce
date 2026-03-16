@@ -19,7 +19,7 @@
 								</li>
 								{% for subCategory in category.subCategories %}
 									<li>
-										<a href="">{{ subCategory.name }}</a>
+										<a href="{{ path('app_home_product_filter', {'id':subCategory.id} )}}">{{ subCategory.name }}</a>
 									</li>
 								{% endfor %}
 								<li><hr class="dropdown-divider"></li>
