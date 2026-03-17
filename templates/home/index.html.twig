@@ -19,7 +19,11 @@
 							<p class="card-text">{{ product.Description|slice(0,60) }}</p>
 							<h3>{{ product.price }}
 								€</h3>
+							{% if product.stock > 0 %}
 							<a href="{{ path('app_cart_new',{'id':product.id}) }}" class="btn btn-outline-success">Ajouter au panier</a>
+							{% else %}
+							<button class="btn btn-secondary w-100" disabled>Rupture de stock</button>
+							{% endif %}
 						</div>
 					</div>
 				</div>
