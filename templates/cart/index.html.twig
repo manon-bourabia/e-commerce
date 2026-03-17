@@ -22,18 +22,20 @@
 					<td>{{ item.quantity }}</td>
 					<td>{{ item.product.price * item.quantity }}</td>
 					<td>
-                    {% if total > 0 %}
-                    <h2>Total : {{total}} euros</h2>
-						<div class="row">
-							<a href="" class="btn btn-sm btn-primary">Validez la commande</a>
-							<a href="{{path('app_cart_remove',{'id':item.product.id}) }}" class=" btn btn-sm btn-outline-danger">Supprimer le panier</a>
-						</div>
-                    {% endif %}
+                    <a href="{{path('app_cart_product_remove',{'id':item.product.id}) }}" class=" btn btn-sm btn-outline-danger">Supprimer du panier</a>
+                    {# {% if total > 0 %}
+                    
+                    {% endif %} #}
 					</td>
 				</tr>
 			{% else %}
 				<p>Votre panier est vide</p>
 			{% endfor %}
 		</table>
+        <h2>Total : {{total}} euros</h2>
+			<div class="row">
+				<a href="" class="btn btn-sm btn-primary">Validez la commande</a>
+				{# <a href="{{path('app_cart_remove',{'id':item.product.id}) }}" class=" btn btn-sm btn-outline-danger">Supprimer le panier</a> #}
+			</div>
 	</div>
 {% endblock %}
