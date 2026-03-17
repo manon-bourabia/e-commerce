@@ -1,41 +1,54 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}City index
-{% endblock %}
-
+{% extends 'base.html.twig' %} {% block title %}Liste des villes{% endblock %}
 {% block body %}
-	<div class="container">
-		<h1>City index</h1>
+<div class="container mt-5">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h1 class="h3">Gestion des Villes</h1>
+        <a href="{{ path('app_city_new') }}" class="btn btn-primary">
+            <i class="fas fa-plus"></i> Ajouter une ville
+        </a>
+    </div>
 
-		<table class="table-bordered">
-			<thead>
-				<tr>
-					<th>Id</th>
-					<th>Nom</th>
-					<th>Frais de port</th>
-					<th>actions</th>
-				</tr>
-			</thead>
-			<tbody>
-				{% for city in cities %}
-					<tr>
-						<td>{{ city.id }}</td>
-						<td>{{ city.name }}</td>
-						<td>{{ city.shippingCost }}</td>
-						<td>
-							<a href="{{ path('app_city_show', {'id': city.id}) }}">Voir</a>
-							<a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
-						</td>
-					</tr>
-				{% else %}
-					<tr>
-						<td colspan="4">Aucun résultat trouvé</td>
-					</tr>
-				{% endfor %}
-			</tbody>
-		</table>
-
-		<a href="{{ path('app_city_new') }}">Créer une nouvelle ville</a>
-	</div>
+    <div class="card shadow-sm">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead class="table-light">
+                    <tr>
+                        <th class="ps-4">Id</th>
+                        <th>Nom de la ville</th>
+                        <th>Frais de port</th>
+                        <th class="text-center">Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for city in cities %}
+                    <tr>
+                        <td class="ps-4 text-muted">{{ city.id }}</td>
+                        <td class="fw-bold">{{ city.name }}</td>
+                        <td>{{ city.shippingCost }} €</td>
+                        <td class="text-center">
+                            <a
+                                href="{{ path('app_city_show', {'id': city.id}) }}"
+                                class="btn btn-sm btn-outline-secondary me-1"
+                                >Voir</a
+                            >
+                            <a
+                                href="{{ path('app_city_edit', {'id': city.id}) }}"
+                                class="btn btn-sm btn-outline-primary"
+                                >Modifier</a
+                            >
+                        </td>
+                    </tr>
+                    {% else %}
+                    <tr>
+                        <td colspan="4" class="text-center py-4 text-muted">
+                            Aucune ville enregistrée
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
 
 {% endblock %}

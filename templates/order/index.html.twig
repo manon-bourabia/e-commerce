@@ -1,0 +1,67 @@
+{% extends 'base.html.twig' %} {% block title %}Commande{% endblock %} {% block
+body %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <h1 class="mb-4">Commande</h1>
+            <div class="card p-4 shadow-sm">
+                {{ form_start(form) }} {{ form_widget(form) }}
+                <div class="d-grid mt-4">
+                    <button type="submit" class="btn btn-primary">
+                        Continuer
+                    </button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="col-md-4 mt-5">
+            <div class="card p-3 bg-light">
+                <h3>Montant : {{ total }} €</h3>
+                <p>
+                    Frais de livraison :
+                    <span id="shippingCost" class="fw-bold">0 €</span>
+                </p>
+                <hr />
+                <h5>
+                    Total final :
+                    <span id="finalTotal" class="text-primary"
+                        >{{ total }} €</span
+                    >
+                </h5>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}{% block javascripts %}
+<script>
+    $(document).ready(function () {
+        const citySelector = $('#order_city');
+
+        function ajaxRequest(url) {
+            $.ajax({
+                url: url,
+                type: 'GET',
+                success: function(response) {
+                    const newResponse = JSON.parse(response);
+                    if (parseInt(newResponse.status) === 200) {
+                        console.log(newResponse.status);
+                        $("#shippingCost").text(newResponse.content + " €");
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error("Erreur AJAX", error);
+                }
+            });
+        }
+
+        citySelector.on('change', function() {
+            const cityValue = $(this).val();
+            const url = `http://localhost:8000/city/${cityValue}/shipping/cost`;
+            
+            ajaxRequest(url);
+            
+            alert("ID de la ville : " + cityValue);
+        });
+    });
+</script>
+{% endblock %}
