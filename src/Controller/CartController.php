@@ -10,6 +10,8 @@ use Symfony\Component\Routing\Attribute\Route;
 
 final class CartController extends AbstractController
 {
+    public function __construct(private readonly ProductRepository $productRepository) {} //mon product repo n'a plus besoin d'être rappeler dans mon controller, il est en lecture seule et en privé, il n'est pas modifiable. Sert a injecter des dependances dans notre controller.
+    
     #[Route('/cart', name: 'app_cart')]
     public function index(SessionInterface $session): Response
     {
@@ -33,7 +35,6 @@ final class CartController extends AbstractController
             'total' => $total
         ]);
     }
-    public function __construct(private readonly ProductRepository $productRepository) {}
 
     #[Route("/cart/add/{id}", name: "app_cart_new", methods: ['GET'])]
     public function addProductToCart(int $id, SessionInterface $session): Response

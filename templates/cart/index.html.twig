@@ -1,10 +1,36 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Panier{% endblock %}
+{% block title %}Panier
+{% endblock %}
 
 {% block body %}
 
-<div class="example-wrapper">
-    <h1>Hello</h1>
-</div>
+	<div class="container">
+		<h1>Panier</h1>
+		<table class="table table-bordered">
+			<tr>
+				<th>Produit</th>
+				<th>Prix</th>
+				<th>Quantité</th>
+				<th>Prix total</th>
+				<th>Action</th>
+			</tr>
+			{% for item in items %}
+				<tr>
+					<td>{{ item.product.name }}</td>
+					<td>{{ item.product.price }}</td>
+					<td>{{ item.quantity }}</td>
+					<td>{{ item.product.price * item.quantity }}</td>
+					<td>
+						<div class="d-grid gap-2 col-6 mx-auto">
+							<a href="" class="btn btn-sm btn-primary">Validez la commande</a>
+							<a href="" class=" btn btn-sm btn-outline-danger">Supprimer le panier</a>
+						</div>
+					</td>
+				</tr>
+			{% else %}
+				<p>Votre panier est vide</p>
+			{% endfor %}
+		</table>
+	</div>
 {% endblock %}
