@@ -11,8 +11,8 @@
 			<thead>
 				<tr>
 					<th>Id</th>
-					<th>Name</th>
-					<th>ShippingCost</th>
+					<th>Nom</th>
+					<th>Frais de port</th>
 					<th>actions</th>
 				</tr>
 			</thead>
@@ -23,19 +23,19 @@
 						<td>{{ city.name }}</td>
 						<td>{{ city.shippingCost }}</td>
 						<td>
-							<a href="{{ path('app_city_show', {'id': city.id}) }}">show</a>
-							<a href="{{ path('app_city_edit', {'id': city.id}) }}">edit</a>
+							<a href="{{ path('app_city_show', {'id': city.id}) }}">Voir</a>
+							<a href="{{ path('app_city_edit', {'id': city.id}) }}">Modifier</a>
 						</td>
 					</tr>
 				{% else %}
 					<tr>
-						<td colspan="4">no records found</td>
+						<td colspan="4">Aucun résultat trouvé</td>
 					</tr>
 				{% endfor %}
 			</tbody>
 		</table>
 
-		<a href="{{ path('app_city_new') }}">Create new</a>
+		<a href="{{ path('app_city_new') }}">Créer une nouvelle ville</a>
 	</div>
 
 {% endblock %}
