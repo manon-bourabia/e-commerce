@@ -7,7 +7,11 @@
     < class="row">
         <div class="col-8">
     <h1 class="mt-4 mb-4">Mes commandes</h1>
+    {{form_start(form)}}
+        <input class="btn" type="submit" value="Continuer">
+    {{form_end(form)}}
         </div>
+        <div class="col-4">
     {# <table class="table table-bordered">
         <tr>
             <th>Numéro de commande</th>
