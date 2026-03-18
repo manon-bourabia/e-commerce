@@ -12,7 +12,6 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Component\Security\Http\Attribute\IsGranted;
 
-#[IsGranted('ROLE_EDITOR')]
 #[Route('/city')]
 final class CityController extends AbstractController
 {
@@ -80,11 +79,14 @@ final class CityController extends AbstractController
 
         return $this->redirectToRoute('app_city_index', [], Response::HTTP_SEE_OTHER);
     }
-    #[Route('/city/{id}/shipping/cost', name: 'app_city_shipping_cost')]
+    #[Route('/{id}/shipping/cost', name: 'app_city_shipping_cost')]
     public function cityShippingCost(City $city): Response
     {
         $cityShippingPrice = $city->getShippingCost();
 
-        return new Response($cityShippingPrice);
+        return $this->json([
+            'status' => 200,
+            'content' => $cityShippingPrice
+        ]);
     }
 }

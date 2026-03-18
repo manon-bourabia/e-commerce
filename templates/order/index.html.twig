@@ -42,11 +42,23 @@ body %}
                 url: url,
                 type: 'GET',
                 success: function(response) {
-                    const newResponse = JSON.parse(response);
-                    if (parseInt(newResponse.status) === 200) {
-                        console.log(newResponse.status);
-                        $("#shippingCost").text(newResponse.content + " €");
+                    let data = (typeof response === 'string') ? JSON.parse(response) : response;
+
+                    console.log("Données reçues :", data);
+                    if (data.status === 200 || data.status === "200") {
+                        $("#shippingCost").text(data.content + " €");
                     }
+
+                    let totalProducts = parseFloat("{{ total }}");
+                    let shippingCost = parseFloat(data.content);
+                    let totalFinal = totalProducts + shippingCost;
+
+                    $("#finalTotal").text(totalFinal.toFixed(2) + " €")
+                    // const newResponse = JSON.parse(response);
+                    // if (parseInt(newResponse.status) === 200) {
+                    //     console.log(newResponse.status);
+                    //     $("#shippingCost").text(newResponse.content + " €");
+                    // }
                 },
                 error: function(xhr, status, error) {
                     console.error("Erreur AJAX", error);
@@ -56,7 +68,7 @@ body %}
 
         citySelector.on('change', function() {
             const cityValue = $(this).val();
-            const url = `http://localhost:8000/city/${cityValue}/shipping/cost`;
+            const url = `/city/${cityValue}/shipping/cost`;
             
             ajaxRequest(url);
             
