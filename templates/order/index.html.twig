@@ -53,7 +53,7 @@ $(document).ready(function(){
     error:function(xhr,status,error){
         success: function(response){
         const newResponse = JSON.parse(response)
-        if (parseInt(newResponse.status))
+        if (parseInt(newResponse.status) === 200)
     }
     
     }
