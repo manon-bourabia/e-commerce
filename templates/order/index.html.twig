@@ -6,14 +6,27 @@
 <div class ="container">
     <div class="row">
         <div class="col-8">
-    <h1 class="mt-4 mb-4">Mes commandes</h1>
-    {{form_start(form)}}
-    {{form_widget(form)}}
-        <input class="btn btn-success" type="submit" value="Continuer">
-    {{form_end(form)}}
+            <h1 class="mt-4 mb-4">Mes commandes</h1>
+            {{form_start(form)}}
+            {{form_widget(form)}}
+                <input class="btn btn-success" type="submit" value="Continuer">
+            {{form_end(form)}}
         </div>
         <div class="col-4 mt-5">
-            <h3>Montant à payer : {{ total }} euros</h3>
+            <span class="mb-2">Montant à payer : </span>
+            <h3>
+                <span id="card-price">{{ total }} €</span>
+            </h3>
+            <span>Frais de livraison :</span>
+            <h3>
+                <span id="shippingCost"></span>
+                €
+            </h3>
+            <span>Montant total à payer : </span>
+            <h3>
+                <span class="total-price"></span>
+                €
+            </h3>
         </div>
     {# <table class="table table-bordered">
         <tr>
@@ -43,21 +56,32 @@ $(document).ready(function(){
     const citySelector = $('#order_city');
     const cityValue = citySelector.val();
 
-    const url = 'http://localhost:8000/city/${cityValue}/shipping/cost';
+    const url = `/city/${cityValue}/shipping/cost`;
 
-    $.ajax({})
-    url:url,
-    type : 'GET',
-    success:function(response){
+    function ajaxRequest(url) {
+        $.ajax({
+            url:url,
+            type : 'GET',
+            success:function(response){
+                const newResponse = JSON.parse(response)
 
-    },
-    error:function(xhr,status,error){
-        success: function(response){
-        const newResponse = JSON.parse(response)
-        if (parseInt(newResponse.status) === 200)
+                if (parseInt(newResponse.status) === 200){
+                    console.log(newResponse.status)
+                    $("#shippingCost").text(newResponse.content)
+                }
+            },
+            error:function(xhr,status,error){
+
+            }
+        })
     }
-    
-    }
-})
+
+    ajaxRequest(url)
+
+    citySelector.on('change', function(){
+        alert ("hello world")
+    })
+
+})        
 </script>
 {% endblock %}

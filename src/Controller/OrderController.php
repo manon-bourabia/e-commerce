@@ -48,7 +48,11 @@ final class OrderController extends AbstractController
     {
         $cityShippingPrice = $city->getShippingCost();
 
-        return new Response($cityShippingPrice);
+        return new Response(json_encode([
+            'status' => 200,
+            'message' => 'on',
+            'content' => $cityShippingPrice
+        ]));
     }
 }
 
