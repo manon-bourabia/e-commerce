@@ -68,6 +68,11 @@ $(document).ready(function(){
                 if (parseInt(newResponse.status) === 200){
                     console.log(newResponse.status)
                     $("#shippingCost").text(newResponse.content)
+
+                    const cardPrice = parseInt($('#card-price').text());
+                    const shippingCost = parseInt($('#shippingCost').text());
+                    $('.total-price').text(cardPrice + shippingCost);
+
                 }
             },
             error:function(xhr,status,error){
@@ -79,7 +84,8 @@ $(document).ready(function(){
     ajaxRequest(url)
 
     citySelector.on('change', function(){
-        alert ("hello world")
+        const urlUpdate = `/city/${$(this).val()}/shipping/cost`;
+        ajaxRequest(urlUpdate)
     })
 
 })        
