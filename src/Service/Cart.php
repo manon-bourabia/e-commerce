@@ -1,41 +1,43 @@
 <?php
 
+
 namespace App\Service;
 
 use App\Repository\ProductRepository;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 
-final class Cart
+class Cart
 {
-    public function __construct(private readonly ProductRepository $productRepository)
-    {
+
+    public function __construct(private readonly ProductRepository $productRepository){
+
     }
 
-    /**
-     * @return array{cart: array<int, array{product: \App\Entity\Product, quantity: int, subtotal: int}>, total: int}
-     */
-    public function getCart(SessionInterface $session): array
-    {
-        $cart = $session->get('cart', []);
-        $items = [];
-        $total = 0;
 
-        foreach ($cart as $productId => $quantity) {
-            $product = $this->productRepository->find($productId);
-            if (null === $product) {
-                continue;
-            }
+    public function getCart($session):array{
+         // Récupère les données du panier en session, ou un tableau vide si il n'y a rien
+         $cart = $session->get('cart', []);
+         // Initialisation d'un tableau pour stocker les données du panier avec les informations de produit
+         $cartWithData = [];
+         // Boucle sur les éléments du panier pour récupérer les informations de produit
+         foreach ($cart as $id => $quantity) {
+             // Récupère le produit correspondant à l'id et la quantité
+             $cartWithData[] = [
+                 'product' => $this->productRepository->find($id), // Récupère le produit via son id
+                 'quantity' => $quantity // Quantité du produit dans le panier
+             ];
+         }
+ 
+         // Calcul du total du panier
+         $total = array_sum(array_map(function ($item) {
+             // Pour chaque élément du panier, multiplie le prix du produit par la quantité
+             return $item['product']->getPrice() * $item['quantity'];
+         }, $cartWithData));
 
-            $subtotal = $product->getPrice() * $quantity;
-            $items[] = [
-                'product' => $product,
-                'quantity' => $quantity,
-                'subtotal' => $subtotal,
-            ];
-
-            $total += $subtotal;
-        }
-
-        return ['cart' => $items, 'total' => $total];
+         return [
+            'cart' => $cartWithData,
+            'total' => $total
+         ];
+ 
     }
+
 }
