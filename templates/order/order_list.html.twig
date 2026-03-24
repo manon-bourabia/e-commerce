@@ -3,7 +3,7 @@
 {% block title %}Order List{% endblock %}
 
 {% block body %}
-    {{include ('layout/_flash_message.html.twig')}}
+    {{include ('layouts/_flash_message.html.twig')}}
     {% for order in orders %}
          <h2> Commande n° {{order.id}} </h2>
             {% if order.isCompleted == true%}
@@ -48,8 +48,8 @@
             <h3>Frais de livraison : {{order.city.shippingCost}}</h3>
             <h3>Total : {{ order.totalPrice }} $</h3>
             <a href="" class="btn btn-outline-primary">Marquer comme livrée</a>
-            <a href="" class="btn btn-outline-primary">Supprimer la commande</a>
-            <a href="" class="btn btn-outline-primary">placeholder</a>
+            <a class="btn btn-outline-success" href="{{ path('app_bill',{'id':order.id} )}}">Imprimer la facture</a>
+            <a href="{{ path('app_orders_remove', {'id': order.id}) }}" class="btn btn-outline-danger" onclick="return confirm('Voulez-vous vraiment supprimer cette commande ?')">Supprimer</a>
         {% endfor %}
     {% endfor %}
     {{ knp_pagination_render(orders,'layouts/pagination_template.html.twig') }}
