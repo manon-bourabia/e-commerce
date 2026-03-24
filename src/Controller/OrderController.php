@@ -11,6 +11,8 @@ use App\Repository\ProductRepository;
 use App\Service\Cart;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManagerInterface;
+use id;
+use Knp\Component\Pager\PaginatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -76,12 +78,26 @@ final class OrderController extends AbstractController
     }
 
     #[Route('/editor/order', name:'app_orders_show')]
-    public function getAllOrder(OrderRepository $orderRepository):Response
+    public function getAllOrder(OrderRepository $orderRepository, PaginatorInterface $paginator, Request $request):Response
     {
+        $data = $orderRepository->findby([], ['id'=>'DESC']);
         $orders = $orderRepository->findAll();
+        $orders = $paginator->paginate(
+            $data,
+        $request->query->getInt('page', 1),
+        3
+        );
 
         return $this->render('order/order_list.html.twig', [
             'orders' => $orders
         ]);
+    }
+
+    #[Route('/editor/order/{id}/is-completed/update', name: 'app_orders_is-completed-update')]
+    public function isCompletedUpdate (OrderRepository $orderRepository, EntityManagerInterface $entityManager) : Response
+    {
+        $order = $orderRepository->findBy(id);
+        $order ->setIsCompleted == true;
+        $entityManager->flush();
     }
 }

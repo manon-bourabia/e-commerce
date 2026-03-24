@@ -6,6 +6,13 @@
 
     {% for order in orders %}
          <h2> Commande n° {{order.id}} </h2>
+            {% if order.isCompleted == true%}
+            <span class="text-sucess">Commande livrée</span>
+            {% else %}
+                <span class="text-danger">Commande non livrée</span>
+            {% endif %}
+            <br>
+            
          <table class="table">
             <tr>
                 <th>Nom</th>
@@ -15,7 +22,7 @@
                 <th>Paiement à la livraison</th>
             </tr>
             <tr>
-                <td>{{order.firstName}}</td>
+                <td>{{order.lastName}}</td>
                 <td>{{order.createdAt|date}}</td>
                 <td>{{order.adresse}}</td>
                 <td>{{order.phone}}</td>
@@ -28,14 +35,22 @@
                 <tr>
                     <th>Nom du produit</th>
                     <th>Image</th>
+                    <th>Quantité</th>
                     <th>Prix</th>
                 </tr>
                 <tr>
                     <td>{{product.product.name}}</td>
-                    <td><img src="{{ asset('images/'~product.product.image)}}" class="card-img-top w-25" alt="image des produits"></td>
+                    <td><img src="{{ asset('images/'~product.product.image)}}" class="card-img-top" style="width: 10vh" alt="image des produits"></td>
+                    <td>{{product.quantity}}</td>
                     <td>{{product.product.price}}</td>
                 </tr>
             </table>
+            <h3>Frais de livraison : {{order.city.shippingCost}}</h3>
+            <h3>Total : {{ order.totalPrice }} $</h3>
+            <a href="" class="btn btn-outline-primary">Marquer comme livrée</a>
+            <a href="" class="btn btn-outline-primary">Supprimer la commande</a>
+            <a href="" class="btn btn-outline-primary">placeholder</a>
         {% endfor %}
     {% endfor %}
+    {{ knp_pagination_render(orders,'layouts/pagination_template.html.twig') }}
 {% endblock %}
