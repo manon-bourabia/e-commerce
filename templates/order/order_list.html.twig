@@ -3,7 +3,7 @@
 {% block title %}Order List{% endblock %}
 
 {% block body %}
-
+    {{include ('layout/_flash_message.html.twig')}}
     {% for order in orders %}
          <h2> Commande n° {{order.id}} </h2>
             {% if order.isCompleted == true%}
