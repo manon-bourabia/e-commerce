@@ -82,8 +82,8 @@ class OrderController extends AbstractController
                             
                         ]);
                         $email = (new Email()) //On importe la classe depuis Symfony\Component\Mime\Email;
-                        ->from("l'antarcthé@gmailcom") //Adresse de l'expéditeur donc notre boutique ou vous mêmes
-                        //->to('to@gmailcom') //Adresse du receveur
+                        ->from("contact-artarcthe@gmail.com") //Adresse de l'expéditeur donc notre boutique ou vous mêmes
+                        // ->to('lea.santosfrancopro@gmail.com') //Adresse du receveur
                         ->to($order->getEmail())
                         ->subject('Confirmation de réception de commande') //Intitulé du mail
                         ->html($html);
@@ -129,7 +129,7 @@ class OrderController extends AbstractController
             6 //je choisi la limite de 6 commandes par page
         );
 
-        return $this->render('order/order.html.twig', [
+        return $this->render('order/order_list.html.twig', [
             "orders"=>$orders
         ]);
     }

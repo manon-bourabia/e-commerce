@@ -6,47 +6,30 @@ use Dompdf\Dompdf;
 use Dompdf\Options;
 use App\Repository\OrderRepository;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route; // Correction de l'import
+use Symfony\Component\Routing\Attribute\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class BillController extends AbstractController
 {
-    // LIGNE 13 : Ajout impératif du "/" au début
-    #[Route('/editor/order/{id}/bill', name: 'app_bill')]
+    #[Route('editor/order/{id}/bill', name: 'app_bill')]
     public function index($id, OrderRepository $orderRepository): Response
     {
-        // 1. Récupération de la commande
         $order = $orderRepository->find($id);
-        
-        if (!$order) {
-            throw $this->createNotFoundException('La facture demandée n\'existe pas.');
-        }
 
-        // 2. Configuration de Dompdf
-        $pdfOptions = new Options();
-        $pdfOptions->set('defaultFont', 'Arial');
-        // Option cruciale pour éviter les crashs d'images en local
-        $pdfOptions->set('isRemoteEnabled', true); 
-
-        $domPdf = new Dompdf($pdfOptions);
-
-        // 3. Génération du HTML
+        $pdfOptions = new Options(); //definit la nouvelle instanciation de classe Options de Dompdf
+        $pdfOptions->set('defaultFont','Arial'); //Définit la font
+        $domPdf = new Dompdf($pdfOptions);//On ajoute les options
         $html = $this->renderView('bill/index.html.twig', [
-            'order' => $order,
-        ]);
-
-        // 4. Chargement et Rendu (On ne fait SURTOUT PAS de ->stream() ici)
-        $domPdf->loadHtml($html);
-        $domPdf->setPaper('A4', 'portrait');
-        $domPdf->render();
-
-        // 5. On récupère le contenu du PDF dans une variable
-        $pdfContent = $domPdf->output();
-
-        // 6. On retourne une réponse Symfony standard (Propre et stable)
-        return new Response($pdfContent, 200, [
-            'Content-Type' => 'application/pdf',
-            'Content-Disposition' => 'inline; filename="Antarcthé-Facture-' . $order->getId() . '.pdf"'
+            'order'=>$order,
+         ]); // On insere ce que l'on veut imprimer
+        $domPdf->loadHtml($html); // On charge le html dans dompdf
+        $domPdf->render(); //On crée le rendu
+        $domPdf->stream('SneakHub-Facture-'.$order->getId().'.pdf',[//On concatene la facture avec la terminaison"pdf"
+            'Attachment'=>false //ca permet de dire on va telecharger le fichier, ou l'afficher et decider de l'imprimer et telecharger
+        ]); 
+        
+        return new Response('',200,[ //
+            'Content-Type' => 'application/pdf' 
         ]);
     }
 }

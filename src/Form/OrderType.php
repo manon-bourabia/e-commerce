@@ -34,7 +34,7 @@ class OrderType extends AbstractType
                     'class'=>'form form-control'
                 ]
             ])
-            ->add('adress', null,[
+            ->add('adresse', null,[
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
