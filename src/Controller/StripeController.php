@@ -74,9 +74,9 @@ class StripeController extends AbstractController
                 $paymentIntent = $event->data->object;
                 
                
-                $fileName = 'stripe-detail-'.uniqid().'.txt';
+                // $fileName = 'stripe-detail-'.uniqid().'.txt';
                 $orderId = $paymentIntent->metadata->orderId;
-                file_put_contents($fileName, $orderId);
+                // file_put_contents($fileName, $orderId);
 
                 $order = $orderRepository->find($orderId);
 
