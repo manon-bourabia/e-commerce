@@ -47,7 +47,7 @@ class StripeController extends AbstractController
         Stripe::setApiKey($_SERVER['STRIPE_SECRET_KEY']);
         
         
-        $endpoint_secret = 'whsec_762838b6a470d9e24ef2fd08b52ec325225147e39308429459f540637fc2205b';
+        $endpoint_secret = ($_SERVER['STRIPE_WEBHOOK_SECRET']);
         
         $payload = $request->getContent();
        
@@ -75,16 +75,17 @@ class StripeController extends AbstractController
                 
                
                 $fileName = 'stripe-detail-'.uniqid().'.txt';
+                file_put_contents($fileName, $paymentIntent);
 
-                $orderId = $paymentIntent->metadata->orderId;
-                $order = $orderRepository->find($orderId);
+                // $orderId = $paymentIntent->metadata->orderId;
+                // $order = $orderRepository->find($orderId);
 
-                $cartPrice = $order->getTotalPrice();
-                $stripeTotalAmount = $paymentIntent->amount/100;
-                if($cartPrice==$stripeTotalAmount){
-                    $order->setIsPaymentCompleted(1);
-                    $entityManager->flush();
-                }
+                // $cartPrice = $order->getTotalPrice();
+                // $stripeTotalAmount = $paymentIntent->amount/100;
+                // if($cartPrice==$stripeTotalAmount){
+                //     $order->setIsPaymentCompleted(1);
+                //     $entityManager->flush();
+                // }
 
                 break;
             case 'payment_method.attached':   
