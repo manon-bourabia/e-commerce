@@ -15,11 +15,13 @@ class OrderType extends AbstractType
     {
         $builder
             ->add('firstName', null,[
+                'label' => 'Prénom',
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
             ])
             ->add('lastName', null,[
+                'label' => 'Nom',
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
@@ -30,6 +32,7 @@ class OrderType extends AbstractType
                 ]
             ])
             ->add('phone', null,[
+                'label' => 'Téléphone',
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
@@ -45,6 +48,8 @@ class OrderType extends AbstractType
             ->add('city', EntityType::class, [
                 'class' => City::class,
                 'choice_label' => 'name',
+                'label' => 'Ville',
+                'placeholder' => 'Choisissez votre ville',
                 'attr'=>[
                         'class'=>'form form-control'
                     ]

@@ -1,149 +1,107 @@
-{% extends 'base.html.twig' %}
-
-{% block title %}Commandes{% endblock %}
-
-{% block body %}
-    <div class="container">
-        <div class="row">
-            <div class="col-8">
-                <h1 class='mt-4 mb-4'>Commande</h1>
+{% extends 'base.html.twig' %} {% block title %}Ma Commande{% endblock %} {% block body %}
+<div class="container mt-4">
+    <div class="row">
+        {# COLONNE GAUCHE : TON FORMULAIRE #}
+        <div class="col-md-8">
+            <h1 class="mb-4">Commande</h1>
+            <div class="card p-4 shadow-sm">
+                {# On garde le data-turbo de Léa pour éviter les bugs au clic sur "Continuer" #}
                 {{ form_start(form, {"attr":{'data-turbo':'false'}}) }}
                     {{ form_widget(form) }}
-                <input type="submit" value="Continuer" class="btn btn-outline-primary">
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary">Continuer</button>
+                    </div>
                 {{ form_end(form) }}
-                
-                
             </div>
-            <div class="col-4 mt-5">
-                <span class='mb-2'>Montant à payer: </span>
-                <h3>
-                    <span id="card-price">{{ total }}</span>
-                    €
-                </h3>  
-                <span>Frais de livraison</span> 
-                <h3>
-                    <span id="shippingCost"></span>
-                    €
-                </h3> 
-                <span>Montant total à payer</span> 
-                <h3>
-                    <span class="total-price"></span>
-                    €
-                </h3> 
+        </div>
+
+        {# COLONNE DROITE : TON RÉCAPITULATIF (AVEC LA VARIABLE 'CART') #}
+        <div class="col-md-4 mt-5">
+            <div class="card p-3 bg-light shadow-sm">
+                <h4 class="mb-3">Récapitulatif</h4>
+                
+                <div class="mb-3">
+                    {# ICI : On utilise 'cart' au lieu de 'items' #}
+                    {% for item in cart %}
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>
+                                <span class="badge bg-secondary me-1">{{ item.quantity }}x</span>
+                                {{ item.product.name }}
+                            </span>
+                            <span class="fw-bold">
+                                {{ (item.product.price * item.quantity)|number_format(2, ',', ' ') }} €
+                            </span>
+                        </div>
+                    {% endfor %}
+                </div>
+
+                <hr />
+                <div class="d-flex justify-content-between">
+                    <span>Montant articles :</span>
+                    {# ID card-price pour que le JS puisse lire la valeur #}
+                    <span class="fw-bold"><span id="card-price">{{ total }}</span> €</span>
+                </div>
+                
+                <div class="d-flex justify-content-between mt-2">
+                    <span>Frais de livraison :</span>
+                    {# ID shippingCost pour que le JS puisse écrire dedans #}
+                    <span class="fw-bold"><span id="shippingCost">0,00</span> €</span>
+                </div>
+
+                <hr />
+                <div class="d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">Total final :</h5>
+                    <h5 class="text-primary mb-0 fw-bold">
+                        {# ID finalTotal pour le résultat du calcul #}
+                        <span id="finalTotal">{{ total }}</span> €
+                    </h5>
+                </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.7.1.min.js" integrity="sha256-/JqT3SQfawRcv/BIHPThkBvs0OEvtFFmqPF/lYI/Cxo=" crossorigin="anonymous"></script>
-    <script>
-        // $(document).ready(function(){ //si le document est bien charge cela affiche cela
-        //     alert('hello world') exemple
-        // });
-       // Lorsque le document est prêt (c'est-à-dire que la page a fini de charger)
-        $(document).ready(function(){
-            // Sélectionne l'élément HTML avec l'id "order_city" et stocke-le dans la variable citySelector
-            const citySelector = $('#order_city');
-                // Récupère la valeur actuelle de l'élément citySelector (c'est-à-dire la valeur sélectionnée dans la liste déroulante)
-            const cityValue = citySelector.val();
-                // Construit l'URL de la requête AJAX en fonction de la valeur de la ville sélectionnée
-            const url = `http://localhost:8000/city/${cityValue}/shipping/cost`;
-                       
-            // Définition d'une fonction nommée ajaxRequest qui prend en paramètre une URL
-            function ajaxRequest(url) {
-            // Envoie une requête AJAX de type GET à l'URL construite
-                $.ajax({
-                    // L'URL de la requête (celle qui a été passée en paramètre)
-                    url: url,
-                    // Le type de requête (ici, GET, ce qui signifie que nous récupérons des données du serveur)
-                    type: 'GET',
-                    // Fonction appelée en cas de succès de la requête (c'est-à-dire si le serveur répond avec un code 200 OK)
-                    success: function(response) {
-                    // On parse le contenu de la réponse en JSON pour le rendre exploitable en JavaScript
-                        const newResponse = JSON.parse(response)
-                        
-                        // On vérifie si le statut de la réponse est égal à 200 (OK)
-                        if (parseInt(newResponse.status) === 200){
-                            // On affiche le statut de la réponse dans la console pour débogage
-                            console.log(newResponse.status)
-                            
-                            // On met à jour le contenu de l'élément HTML ayant l'ID "shippingCost" avec le contenu de la réponse
-                            $("#shippingCost").text(newResponse.content)
+</div>
+{% endblock %}
 
-                            // On récupère le prix de la carte (élément HTML ayant l'ID "card-price") et le coût de livraison (élément HTML ayant l'ID "shippingCost")
-                            const cardPrice = parseInt($('#card-price').text());
-                            //console.log(cardPrice)
-                            const shippingCost = parseInt($('#shippingCost').text());
-                            //console.log(shippingCost)
+{% block javascripts %}
+<script src="https://code.jquery.com/jquery-3.7.1.min.js"></script>
+<script>
+    $(document).ready(function () {
+        const citySelector = $('#order_city');
 
-                            // On met à jour le contenu de l'élément HTML ayant la classe "total-price" avec la somme du prix de la carte et du coût de livraison
-                            $('.total-price').text(cardPrice + shippingCost);
-                        }
-                    },
-                    // Fonction appelée en cas d'erreur de la requête
-                    error: function(xhr, status, error) {
-                    // À remplacer par le code à exécuter en cas d'erreur
-                    }
-                })
+        function updateShipping(cityId) {
+            if (!cityId) {
+                $("#shippingCost").text("0,00");
+                $("#finalTotal").text($("#card-price").text());
+                return;
             }
-            //appel de la fonction
-            ajaxRequest(url)
 
-            citySelector.on('change',function() {
-                const urlUpdate = `http://localhost:8000/city/${$(this).val()}/shipping/cost`;
-                //alert(urlUpdate)
-                ajaxRequest(urlUpdate)
-            })
-        })
-    </script>
-    // <script>//en javascript Vanilla sans jquery
-    //     document.addEventListener('DOMContentLoaded', function() {
-    // // Sélection de l'élément avec l'ID "order_city"
-    //         const citySelector = document.getElementById('order_city');
+            $.ajax({
+                url: '/city/' + cityId + '/shipping/cost',
+                type: 'GET',
+                success: function(response) {
+                    let data = (typeof response === 'string') ? JSON.parse(response) : response;
+                    if (parseInt(data.status) === 200) {
+                        let shipping = parseFloat(data.content);
+                        let totalProducts = parseFloat($('#card-price').text().replace(',', '.'));
 
-    //         // Fonction pour faire une requête AJAX GET
-    //         function ajaxRequest(url) {
-    //             fetch(url)
-    //                 .then(response => response.text()) // récupère la réponse brute (texte)
-    //                 .then(raw => {
-    //                     const newResponse = JSON.parse(raw);
+                        $("#shippingCost").text(shipping.toFixed(2).replace('.', ','));
+                        
+                        let totalFinal = totalProducts + shipping;
+                        $("#finalTotal").text(totalFinal.toFixed(2).replace('.', ','));
+                    }
+                }
+            });
+        }
 
-    //                     if (parseInt(newResponse.status) === 200) {
-    //                         console.log(newResponse.status);
+        // Écoute le changement de ville
+        citySelector.on('change', function() {
+            updateShipping($(this).val());
+        });
 
-    //                         // Mise à jour du contenu de shippingCost
-    //                         document.getElementById('shippingCost').textContent = newResponse.content;
-
-    //                         // Récupération et maj des prix
-    //                         const cardPrice = parseInt(document.getElementById('card-price').textContent, 10);
-    //                         const shippingCost = parseInt(document.getElementById('shippingCost').textContent, 10);
-
-    //                         // Mise à jour du prix total (premier élément trouvé avec la classe 'total-price')
-    //                         const totalPriceElem = document.querySelector('.total-price');
-    //                         if (totalPriceElem) {
-    //                             totalPriceElem.textContent = cardPrice + shippingCost;
-    //                         }
-    //                     }
-    //                 })
-    //                 .catch(error => {
-    //                     // À remplacer par le code à exécuter en cas d'erreur
-    //                     // console.error('Erreur AJAX:', error);
-    //                 });
-    //         }
-
-    //         // Si citySelector existe :
-    //         if (citySelector) {
-    //             const cityValue = citySelector.value;
-    //             const url = `http://localhost:8000/city/${cityValue}/shipping/cost`;
-
-    //             ajaxRequest(url);
-
-    //             // Écouteur sur le changement de ville
-    //             citySelector.addEventListener('change', function() {
-    //                 const urlUpdate = `http://localhost:8000/city/${this.value}/shipping/cost`;
-    //                 ajaxRequest(urlUpdate);
-    //             });
-    //         }
-    //     });
-
-    // </script>
-    
+        // Lance le calcul au chargement si une ville est déjà mise
+        if (citySelector.val()) {
+            updateShipping(citySelector.val());
+        }
+    });
+</script>
 {% endblock %}
