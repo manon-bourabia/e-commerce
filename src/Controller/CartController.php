@@ -2,91 +2,97 @@
 
 namespace App\Controller;
 
+
+
+use App\Service\Cart;
 use App\Repository\ProductRepository;
-use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpFoundation\Session\SessionInterface;
 use Symfony\Component\Routing\Attribute\Route;
+use Symfony\Component\HttpFoundation\Session\SessionInterface;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-final class CartController extends AbstractController
+class CartController extends AbstractController
 {
-    public function __construct(private readonly ProductRepository $productRepository) {} //mon product repo n'a plus besoin d'être rappeler dans mon controller, il est en lecture seule et en privé, il n'est pas modifiable. Sert a injecter des dependances dans notre controller.
 
-    #[Route('/cart', name: 'app_cart')]
-    public function index(SessionInterface $session): Response
+    //Sert a injecter des dependances dans notre controller, donc le repo 
+    //et il sera impossible de le modifier vu qu'il est en readonly
+    //ca va permettre d'utiliser notre repo partout dans le controller 
+    // sans avoir a le repasser en parametre avec $this
+    public function __construct(private readonly ProductRepository $productRepository)
     {
-        $cart = $session->get('cart', []);
-        $cartWithData = [];
-        foreach ($cart as $id => $quantity) {
-            $product = $this->productRepository->find($id);
-            if ($product) {
-                $cartWithData[] = [
-                    'product' => $this->productRepository->find($id),
-                    'quantity' => $quantity
-                ];
-            }
-        }
-        $total = array_sum(array_map(function ($item) {
-            return $item['product']->getPrice() * $item['quantity'];
-        }, $cartWithData));
+        
+    }
 
+ 
+  #[Route("/cart", name: "app_cart", methods: ['GET'])]
+    
+  public function index(SessionInterface $session, Cart $cart): Response
+    {
+
+        // On délègue la logique du panier au service Cart.
+        // Le service va récupérer les données du panier à partir de la session
+        // et calculer le total.
+        $data = $cart->getCart($session);
+        // $cartProducts = $data['cart']; //on recupere les data et donc le panier
+        // $product = []; //on crée une variable qui va recupere nos produits du panier
+        // foreach ($cartProducts as $value) {
+        //     $product[] = $this->productRepository->findOneBy(
+        //         ['id' => $value['id']]
+        //     ); //on boucle sur les produits du panier et on les recupere
+        // }
+
+
+        // Rendu de la vue pour afficher le panier
         return $this->render('cart/index.html.twig', [
-            'items' => $cartWithData,
-            'total' => $total
+            'items'=>$data['cart'], //on retourne ses deux clés afin de les récuperer dans la vue
+            'total'=>$data['total']
+           
         ]);
     }
 
-    #[Route("/cart/add/{id}", name: "app_cart_new", methods: ['GET'])]
-    public function addProductToCart(int $id, SessionInterface $session, ProductRepository $productRepository, EntityManagerInterface $entityManagerInterface): Response
-    {   $product = $productRepository->find($id);
-    if (!$product || $product->getStock() <= 0){
-        $this->addFlash('danger', 'Produit épuisé');
-        return $this->redirectToRoute('app_cart');
-    }
-        $cart = $session->get('cart', []);
+    #[Route("/cart/add/{id}/", name: "app_cart_new", methods: ['GET'])]
+    // Définit une route pour ajouter un produit au panier
 
-        if (!empty($cart[$id])) {
+    public function addProductToCart(int $id, SessionInterface $session): Response
+    // Méthode pour ajouter un produit au panier, prend l'ID du produit et la session en paramètres
+
+    {
+        $cart = $session->get('cart', []);
+        // Récupère le panier actuel de la session, ou un tableau vide si il n'existe pas
+        if (!empty($cart[$id])){
             $cart[$id]++;
-        } else {
-            $cart[$id] = 1;
+        }else{
+            $cart[$id]=1;
         }
-
-        $session->set('cart', $cart);
-
-        $product->setStock($product->getStock() -1);
-        $entityManagerInterface->persist($product);
-        $entityManagerInterface->flush();
-
+        // Si le produit est déjà dans le panier, incrémente sa quantité, sinon l'ajoute avec une quantité de 1
+        $session->set('cart',$cart);
+        // Met à jour le panier dans la session
         return $this->redirectToRoute('app_cart');
+        // Redirige vers la page du panier
     }
 
-    #[Route("/cart/remove", name: 'app_cart_remove', methods: ['GET'])]
-    public function removeToCart(SessionInterface $sessionInterface): Response
+    #[Route("/cart/remove/{id}/", name: "app_cart_product_remove", methods: ['GET'])]
+    public function removeToCart($id, SessionInterface $session): Response
     {
-        $sessionInterface->set('cart', []);
-
-        return $this->redirectToRoute('app_cart');
-    }
-    
-    #[Route('/cart/remove/{id}', name: 'app_cart_product_remove')]
-    public function remove(int $id, SessionInterface $session, ProductRepository$productRepository, EntityManagerInterface $entityManagerInterface): Response
-    {
+         // Récupération du contenu du panier en session, ou initialisation à un tableau vide si il n'existe pas
         $cart = $session->get('cart', []);
-
+        // Vérification si le produit à supprimer existe dans le panier
         if (!empty($cart[$id])) {
-            $product = $productRepository->find($id);
-            
-            if ($product) {
-                $product->setStock($product->getStock() + $cart[$id]);
-                $entityManagerInterface->persist($product);
-                $entityManagerInterface->flush();
-            } 
+            // Suppression du produit du panier
             unset($cart[$id]);
         }
-
+        // Mise à jour du contenu du panier en session
         $session->set('cart', $cart);
+        // Redirection vers la page du panier
+        return $this->redirectToRoute('app_cart');
+    }
 
+    #[Route("/cart/remove", name: "app_cart_remove", methods: ['GET'])]
+    public function remove(SessionInterface $session): Response
+    {
+        // Mise à jour du contenu du panier en session
+        $session->set('cart', []);
+        // Redirection vers la page du panier
         return $this->redirectToRoute('app_cart');
     }
 }

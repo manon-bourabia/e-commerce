@@ -83,12 +83,10 @@ final class CityController extends AbstractController
     public function cityShippingCost(City $city): Response
     {
         $cityShippingPrice = $city->getShippingCost();
-
-        return new Response($cityShippingPrice);
         
-        // return $this->json([
-        //     'status' => 200,
-        //     'content' => $cityShippingPrice
-        // ]);
+        return $this->json([
+            'status' => 200,
+            'content' => $cityShippingPrice
+        ]);
     }
 }
