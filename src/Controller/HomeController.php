@@ -15,42 +15,42 @@ use Symfony\Component\Routing\Attribute\Route;
 final class HomeController extends AbstractController
 {
     #[Route('/', name: 'app_home', methods: ['GET'])]
-   public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request, PaginatorInterface $paginator): Response
-{
-    $data = $productRepository->findBy([], ['id' => 'DESC']);
-
-    $products = $paginator->paginate(
-        $data,
-        $request->query->getInt('page', 1),
-        4
-    );
-
-    return $this->render('home/index.html.twig', [
-        'products' => $products,
-        'categories' => $categoryRepository->findAll(),
-        'pagination' => $products
-    ]);
-}
+    public function index(ProductRepository $productRepository, CategoryRepository $categoryRepository, Request $request, PaginatorInterface $paginator): Response
+    {
+        $data = $productRepository->findby([], ['id'=>'DESC']);
+        $products = $productRepository->findAll(); 
+        $products = $paginator->paginate(
+            $data,
+            $request->query->getInt('page', 1),
+            3
+        
+        );
+        
+        return $this->render('home/index.html.twig', [
+            'products'=>$products,
+            'categories'=>$categoryRepository->findAll(),
+        ]);
+    }
     #[Route('/product/{id}/show', name: 'app_home_product_show', methods: ['GET'])]
     public function showProduct(Product $product, ProductRepository $productRepository, CategoryRepository $categoryRepository): Response
     {
-        $lastProductsAdd = $productRepository->findBy([], ['id'=>'DESC'],3);
+        $lastProductsAdd = $productRepository->findBy([], ['id'=>'DESC'],5);
         
         return $this->render('home/show.html.twig', [
             'product'=>$product,
+            'products'=>$lastProductsAdd,
             'categories'=>$categoryRepository->findAll(),
-            'products'=>$lastProductsAdd
         ]);
     }
-    #[Route('/product/subCategory/{id}/filter', name: 'app_home_product_filter')]
-    public function filter ($id, SubCategoryRepository $subCategoryRepository) : Response
+    #[Route('product/subcategory/{id}/filter', name: 'app_home_product_filter', methods: ['GET'])]
+    public function filter($id, SubCategoryRepository $subCategoryRepository, CategoryRepository $categoryRepository): Response
     {
-        $product = $subCategoryRepository->find($id)->getProduct();
+        $products = $subCategoryRepository->find($id)->getProduct();
         $subCategory = $subCategoryRepository->find($id);
-        
-        return $this->render('home/filter.html.twig',[
-            'products'=>$product,
-            'subCategory'=>$subCategory
+        return $this->render('home/filter.html.twig', [
+            'products'=>$products,
+            'subCategories'=>$subCategory,
+            'categories'=>$categoryRepository->findAll(),
         ]);
     }
 }

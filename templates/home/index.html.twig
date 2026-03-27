@@ -19,17 +19,12 @@
 							<p class="card-text">{{ product.Description|slice(0,60) }}</p>
 							<h3>{{ product.price }}
 								€</h3>
-							{% if product.stock > 0 %}
-							<a href="{{ path('app_cart_new',{'id':product.id}) }}" class="btn btn-outline-success">Ajouter au panier</a>
-							{% else %}
-							<button class="btn btn-secondary w-100" disabled>Rupture de stock</button>
-							{% endif %}
+							<a href="{{path('app_cart_new',{'id':product.id})}}" class="btn btn-outline-success">Ajouter au panier</a>
 						</div>
 					</div>
 				</div>
 			{% endfor %}
 		</div>
-		{{ knp_pagination_render(products, 'layouts/pagination_template.html.twig')}}
+		{{ knp_pagination_render(products,'layouts/pagination_template.html.twig') }}
 	</div>
-
 {% endblock %}

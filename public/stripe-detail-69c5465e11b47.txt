@@ -1,0 +1,81 @@
+Stripe\PaymentIntent JSON: {
+    "id": "pi_3TFF9MGobJ4ciFtv1keS136f",
+    "object": "payment_intent",
+    "amount": 1450,
+    "amount_capturable": 0,
+    "amount_details": {
+        "shipping": {
+            "amount": 0,
+            "from_postal_code": null,
+            "to_postal_code": null
+        },
+        "tax": {
+            "total_tax_amount": 0
+        },
+        "tip": []
+    },
+    "amount_received": 1450,
+    "application": null,
+    "application_fee_amount": null,
+    "automatic_payment_methods": null,
+    "canceled_at": null,
+    "cancellation_reason": null,
+    "capture_method": "automatic_async",
+    "client_secret": "pi_3TFF9MGobJ4ciFtv1keS136f_secret_K87XoanhzuFERLjJVDvIavZR8",
+    "confirmation_method": "automatic",
+    "created": 1774536284,
+    "currency": "eur",
+    "customer": null,
+    "customer_account": null,
+    "description": null,
+    "excluded_payment_method_types": null,
+    "last_payment_error": null,
+    "latest_charge": "ch_3TFF9MGobJ4ciFtv1i1pn5Ca",
+    "livemode": false,
+    "metadata": {
+        "orderId": "37"
+    },
+    "next_action": null,
+    "on_behalf_of": null,
+    "payment_details": {
+        "customer_reference": null,
+        "order_reference": "cs_test_b1wLDtb9zIIX0bToMpt4KRJ5Kdr70cYVt3XRs5Ct30AzkpUakXaKYnBIsy"
+    },
+    "payment_method": "pm_1TFF9LGobJ4ciFtv7s2yt1uu",
+    "payment_method_configuration_details": null,
+    "payment_method_options": {
+        "card": {
+            "installments": null,
+            "mandate_options": null,
+            "network": null,
+            "request_three_d_secure": "automatic"
+        }
+    },
+    "payment_method_types": [
+        "card"
+    ],
+    "processing": null,
+    "receipt_email": null,
+    "review": null,
+    "setup_future_usage": null,
+    "shipping": {
+        "address": {
+            "city": "M\u00e9rignac",
+            "country": "FR",
+            "line1": "7 rue Winston Churchill",
+            "line2": "Appartement 325 \u00e9tage 6",
+            "postal_code": "33700",
+            "state": null
+        },
+        "carrier": null,
+        "name": "L\u00e9a SANTOS FRANCO",
+        "phone": null,
+        "tracking_number": null
+    },
+    "source": null,
+    "statement_descriptor": null,
+    "statement_descriptor_suffix": null,
+    "status": "succeeded",
+    "transfer_data": null,
+    "transfer_group": null
+}

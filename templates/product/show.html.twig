@@ -27,6 +27,8 @@
         </tbody>
     </table>
 
+    <a class="btn btn-outline-primary" href="{{path('app_cart_new',{'id':product.id})}}">Ajouter au panier</a>
+
     <a class="btn btn-outline-primary" href="{{ path('app_product_index') }}">Retour à la liste</a>
 
     <a class="btn btn-outline-warning" href="{{ path('app_product_edit', {'id': product.id}) }}">Modifier</a>

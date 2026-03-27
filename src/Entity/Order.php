@@ -23,16 +23,16 @@ class Order
     private ?string $lastName = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $phoneNumber = null;
+    private ?string $phone = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $adress = null;
+    private ?string $adresse = null;
 
-    #[ORM\ManyToOne(inversedBy: 'orders')]
-    private ?City $city = null;
+    #[ORM\ManyToOne(inversedBy: 'createdAt')]
+    private ?city $city = null;
 
     #[ORM\Column]
-    private ?\DateTimeImmutable $createAt = null;
+    private ?\DateTimeImmutable $createdAt = null;
 
     #[ORM\Column]
     private ?bool $payOnDelivery = null;
@@ -40,11 +40,20 @@ class Order
     /**
      * @var Collection<int, OrderProducts>
      */
-    #[ORM\OneToMany(targetEntity: OrderProducts::class, mappedBy: '_order', orphanRemoval: true)]
+    #[ORM\OneToMany(targetEntity: OrderProducts::class, mappedBy: '_order')]
     private Collection $orderProducts;
 
     #[ORM\Column]
-    private ?float $total = null;
+    private ?float $totalPrice = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isCompleted = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $email = null;
+
+    #[ORM\Column(nullable: true)]
+    private ?bool $isPaymentCompleted = null;
 
     public function __construct()
     {
@@ -80,50 +89,50 @@ class Order
         return $this;
     }
 
-    public function getPhoneNumber(): ?string
+    public function getPhone(): ?string
     {
-        return $this->phoneNumber;
+        return $this->phone;
     }
 
-    public function setPhoneNumber(string $phoneNumber): static
+    public function setPhone(string $phone): static
     {
-        $this->phoneNumber = $phoneNumber;
+        $this->phone = $phone;
 
         return $this;
     }
 
-    public function getAdress(): ?string
+    public function getAdresse(): ?string
     {
-        return $this->adress;
+        return $this->adresse;
     }
 
-    public function setAdress(string $adress): static
+    public function setAdresse(string $adresse): static
     {
-        $this->adress = $adress;
+        $this->adresse = $adresse;
 
         return $this;
     }
 
-    public function getCity(): ?City
+    public function getCity(): ?city
     {
         return $this->city;
     }
 
-    public function setCity(?City $city): static
+    public function setCity(?city $city): static
     {
         $this->city = $city;
 
         return $this;
     }
 
-    public function getCreateAt(): ?\DateTimeImmutable
+    public function getCreatedAt(): ?\DateTimeImmutable
     {
-        return $this->createAt;
+        return $this->createdAt;
     }
 
-    public function setCreateAt(\DateTimeImmutable $createAt): static
+    public function setCreatedAt(\DateTimeImmutable $createdAt): static
     {
-        $this->createAt = $createAt;
+        $this->createdAt = $createdAt;
 
         return $this;
     }
@@ -170,14 +179,50 @@ class Order
         return $this;
     }
 
-    public function getTotal(): ?float
+    public function getTotalPrice(): ?float
     {
-        return $this->total;
+        return $this->totalPrice;
     }
 
-    public function setTotal(float $total): static
+    public function setTotalPrice(float $totalPrice): static
     {
-        $this->total = $total;
+        $this->totalPrice = $totalPrice;
+
+        return $this;
+    }
+
+    public function isCompleted(): ?bool
+    {
+        return $this->isCompleted;
+    }
+
+    public function setIsCompleted(?bool $isCompleted): static
+    {
+        $this->isCompleted = $isCompleted;
+
+        return $this;
+    }
+
+    public function getEmail(): ?string
+    {
+        return $this->email;
+    }
+
+    public function setEmail(string $email): static
+    {
+        $this->email = $email;
+
+        return $this;
+    }
+
+    public function isPaymentCompleted(): ?bool
+    {
+        return $this->isPaymentCompleted;
+    }
+
+    public function setIsPaymentCompleted(?bool $isPaymentCompleted): static
+    {
+        $this->isPaymentCompleted = $isPaymentCompleted;
 
         return $this;
     }

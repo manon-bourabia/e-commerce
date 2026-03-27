@@ -25,11 +25,11 @@ class City
      * @var Collection<int, Order>
      */
     #[ORM\OneToMany(targetEntity: Order::class, mappedBy: 'city')]
-    private Collection $orders;
+    private Collection $createdAt;
 
     public function __construct()
     {
-        $this->orders = new ArrayCollection();
+        $this->createdAt = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -64,27 +64,27 @@ class City
     /**
      * @return Collection<int, Order>
      */
-    public function getOrders(): Collection
+    public function getCreatedAt(): Collection
     {
-        return $this->orders;
+        return $this->createdAt;
     }
 
-    public function addOrder(Order $order): static
+    public function addCreatedAt(Order $createdAt): static
     {
-        if (!$this->orders->contains($order)) {
-            $this->orders->add($order);
-            $order->setCity($this);
+        if (!$this->createdAt->contains($createdAt)) {
+            $this->createdAt->add($createdAt);
+            $createdAt->setCity($this);
         }
 
         return $this;
     }
 
-    public function removeOrder(Order $order): static
+    public function removeCreatedAt(Order $createdAt): static
     {
-        if ($this->orders->removeElement($order)) {
+        if ($this->createdAt->removeElement($createdAt)) {
             // set the owning side to null (unless already changed)
-            if ($order->getCity() === $this) {
-                $order->setCity(null);
+            if ($createdAt->getCity() === $this) {
+                $createdAt->setCity(null);
             }
         }
 

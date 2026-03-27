@@ -14,44 +14,44 @@ class OrderType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
-            ->add('firstName', null, [
-                'label'=>'Nom',
+            ->add('firstName', null,[
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
             ])
-            ->add('lastName', null, [
-                'label'=>'Prénom',
+            ->add('lastName', null,[
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
             ])
-            ->add('phoneNumber', null, [
-                'label'=>'Numéro de téléphone',
+            ->add('email', null,[
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
             ])
-            ->add('adress', null, [
-                'label'=>'Adresse',
+            ->add('phone', null,[
                 'attr'=>[
                     'class'=>'form form-control'
                 ]
             ])
-            // ->add('createAt', null, [
+            ->add('adresse', null,[
+                'attr'=>[
+                    'class'=>'form form-control'
+                ]
+            ])
+            // ->add('createdAt', null, [
             //     'widget' => 'single_text',
             // ])
             ->add('city', EntityType::class, [
-                'label'=>'Ville',
                 'class' => City::class,
                 'choice_label' => 'name',
-                'placeholder' => 'Choisissez votre ville...',
-                'attr' => ['class' => 'form-control']
+                'attr'=>[
+                        'class'=>'form form-control'
+                    ]
             ])
-            ->add('payOnDelivery', null,[
-              'label' => 'Payer à la livraison'  
+            ->add('payOnDelivery', null, [
+                'label'=>'Payez à la livraison'
             ])
-                
         ;
     }
 
