@@ -11,9 +11,56 @@
 }
 
 a.titleProdLink{
-    text-decoration: none !important;
+    text-decoration: none;
     color: rgb(189, 224, 236);
 }
 a{
     text-decoration: none;
+}
+.btn-primary {
+    background-color: #1a1a1a !important; /* Noir très sombre */
+    border: none !important;
+    border-radius: 8px !important;
+    padding: 10px 20px !important;
+    font-weight: 600 !important;
+    transition: all 0.3s ease !important;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-size: 0.85rem;
+}
+
+.btn-primary:hover {
+    background-color: #444 !important; /* Gris foncé au survol */
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2) !important;
+}
+
+/* 2. La Pagination : Exit les gros blocs bleus */
+.pagination {
+    --bs-pagination-color: #1a1a1a;
+    --bs-pagination-bg: #fff;
+    --bs-pagination-border-color: #eee;
+    --bs-pagination-hover-color: #fff;
+    --bs-pagination-hover-bg: #1a1a1a;
+    --bs-pagination-active-bg: #1a1a1a;
+    --bs-pagination-active-border-color: #1a1a1a;
+}
+
+.page-link {
+    border-radius: 5px !important;
+    margin: 0 3px;
+    border: 1px solid #eee !important;
+    padding: 8px 16px;
+}
+
+.page-item.active .page-link {
+    background-color: #1a1a1a !important;
+    border-color: #1a1a1a !important;
+}
+
+/* 3. Les Titres pour la DA */
+h1, h4, h5 {
+    font-weight: 800 !important;
+    letter-spacing: -1px;
+    color: #1a1a1a;
 }

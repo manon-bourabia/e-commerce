@@ -3,7 +3,7 @@
         <ul class="pagination paginationButton">
         {% if previous is defined %}
             <li class="page-item">
-            <a href="{{path(route, query|merge ({(pageParameterName):previous}))}}" class="page-link">Previous</a></li>
+            <a href="{{path(route, query|merge ({(pageParameterName):previous}))}}" class="page-link">Précedent</a></li>
         {% endif %}
         {% for page in pagesInRange %}
         <li class="page-item active" aria-current="page">
@@ -15,7 +15,7 @@
         {% endfor %}
         {% if next is defined %}
             <li class="page-item">
-            <a class="page-link" href="{{path(route, query|merge ({(pageParameterName):next}))}}" class="page-link">Next</a></li>
+            <a class="page-link" href="{{path(route, query|merge ({(pageParameterName):next}))}}" class="page-link">Suivant</a></li>
         {% endif %}
         </ul>
     </nav>

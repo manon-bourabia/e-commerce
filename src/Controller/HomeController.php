@@ -22,7 +22,7 @@ final class HomeController extends AbstractController
         $products = $paginator->paginate(
             $data,
             $request->query->getInt('page', 1),
-            3
+            5
         
         );
         

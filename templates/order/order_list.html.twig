@@ -44,7 +44,7 @@
             {% for product in order.orderProducts %}
                 <tr>
                     <td>
-                        <img style="width: 80px" src="{{ asset('uploads/images/'~product.product.image)}}">
+                        <img style="width: 80px" src="{{ asset('images/'~product.product.image)}}">
                     </td>
                     <td>{{ product.product.name }}</td>
                     <td>{{ product.product.description|slice(0,100)}}</td>
