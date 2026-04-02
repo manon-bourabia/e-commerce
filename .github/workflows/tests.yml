@@ -15,14 +15,20 @@ jobs:
           php-version: '8.4'
           extensions: mbstring, xml, ctype, iconv, intl, sqlite3, pdo_sqlite
           tools: composer:v2
-          coverage: none
 
       - name: Install dependencies
-      
         run: composer install --prefer-dist --no-progress --ignore-platform-reqs
+
+      - name: Prepare Symfony Folders
+        # Crée le dossier var et donne les permissions (essentiel sur Linux/GitHub)
+        run: |
+          mkdir -p var/cache var/log
+          chmod -R 777 var
 
       - name: Run Tests
         env:
           APP_ENV: test
+          APP_SECRET: testsecret
           DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
-        run: php bin/phpunit --colors=always
+        # On utilise le binaire phpunit directement pour plus de stabilité
+        run: vendor/bin/phpunit --colors=always
