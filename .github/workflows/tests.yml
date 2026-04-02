@@ -1,34 +1,26 @@
 name: Tests Symfony E-commerce
 
-on: 
-  push:
-    branches: [ master, main, develop ]
-  pull_request:
-    branches: [ master, main ]
+on: [push, pull_request]
 
 jobs:
-  tests:
+  symfony-tests:
     runs-on: ubuntu-latest
-
     steps:
-    - name: Checkout
-      uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@v2
-      with:
-        php-version: '8.3' # On reste sur 8.3 qui est très stable sur GitHub
-        extensions: mbstring, xml, ctype, iconv, intl, sqlite3, pdo_sqlite
-        coverage: none
+      - name: Setup PHP
+        uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.4'
+          extensions: mbstring, xml, ctype, iconv, intl, sqlite3, pdo_sqlite
+          coverage: none
 
-    - name: Install dependencies
-      # On ajoute --no-scripts pour éviter que Symfony essaie de vider le cache avant l'install
-      run: composer install --prefer-dist --no-progress --no-scripts
+      - name: Install Dependencies
+        run: composer install --prefer-dist --no-progress --no-scripts
 
-    - name: Run PHPUnit tests
-      env:
-        APP_ENV: test
-        APP_SECRET: testsecret
-        # Cette ligne est MAGIQUE : elle force GitHub à utiliser SQLite en mémoire
-        DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
-      run: php bin/phpunit --colors=always
+      - name: Execute tests
+        env:
+          APP_ENV: test
+          APP_SECRET: testsecret
+          DATABASE_URL: "sqlite:///%kernel.project_dir%/var/test.db"
+        run: php bin/phpunit --colors=always
