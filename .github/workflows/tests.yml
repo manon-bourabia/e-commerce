@@ -26,10 +26,10 @@ jobs:
       uses: actions/checkout@v4
     # 2. Configuration de l'environnement PHP
     # Utilise l'action populaire 'setup-php' pour installer PHP et les extensions
-    - name: Setup PHP 8.5  
+    - name: Setup PHP 8.4  
       uses: shivammathur/setup-php@v2
       with:
-        php-version: '8.5'  # Force la version de PHP correspondant à votre projet
+        php-version: '8.4'  # Force la version de PHP correspondant à votre projet
         extensions: sqlite3  # Installe SQLite (souvent utilisé pour des tests rapides sans base de données lourde)
 
     # 3. Mise en cache des dépendances Composer
