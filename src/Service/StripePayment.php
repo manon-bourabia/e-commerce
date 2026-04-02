@@ -53,8 +53,8 @@ class StripePayment
                 ],$products)
             ],
             'mode' => 'payment', 
-            'cancel_url' => 'http://localhost:8000/pay/cancel', 
-            'success_url' => 'http://localhost:8000/pay/success', 
+            'cancel_url' => 'http://localhost:8000/pay/cancel/' . $orderId, 
+            'success_url' => 'http://localhost:8000/pay/success/' . $orderId,
             'billing_address_collection' => 'required', 
             'shipping_address_collection' => [ 
                 'allowed_countries' => ['FR','EG'],

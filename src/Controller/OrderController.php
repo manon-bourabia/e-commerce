@@ -34,74 +34,73 @@ class OrderController extends AbstractController
         ProductRepository $productRepository,
         EntityManagerInterface $entityManager,
         Cart $cart,
+        MailerInterface $mailer // Assure-toi que le MailerInterface est bien injecté ici ou en haut
     ): Response {
 
-        // Récupère les données du panier à partir de la session using le service Cart
+        // 1. Récupération du panier
         $data = $cart->getCart($session);
-        // Crée un nouvel objet Order
         $order = new Order();
-        // Crée un formulaire pour gérer la création de la commande using le type de formulaire OrderType
         $form = $this->createForm(OrderType::class, $order);
-        // Gère la soumission du formulaire
         $form->handleRequest($request);
 
-        //quand c'est true
+        // 2. Si le formulaire est validé
         if ($form->isSubmitted() && $form->isValid()) {
-            // Vérifie si le total du panier n'est pas vide
             if (!empty($data['total'])) {
+
+                // Configuration de la commande de base
                 $totalPrice = $data['total'] + $order->getCity()->getShippingCost();
-                // Définit le prix total de la commande
                 $order->setTotalPrice($totalPrice);
-                // Définit la date de création de la commande
                 $order->setCreatedAt(new \DateTimeImmutable());
-                $order->setIsPaymentCompleted(0); //on initialise a false 
-                //dd($order);
+                $order->setIsPaymentCompleted(0);
+
                 $entityManager->persist($order);
                 $entityManager->flush();
-                // Boucle sur chaque élément du panier
+
+                // Enregistrement des produits de la commande
                 foreach ($data['cart'] as $value) {
-                    // Crée un nouvel objet OrderProducts
                     $orderProduct = new OrderProducts();
-                    // Définit la commande pour le produit de la commande
                     $orderProduct->setOrder($order);
-                    // Définit le produit pour le produit de la commande
                     $orderProduct->setProduct($value['product']);
-                    // Définit la quantité pour le produit de la commande
                     $orderProduct->setQuantity($value['quantity']);
-                    // Enregistre le produit de la commande dans la base de données
                     $entityManager->persist($orderProduct);
-                    $entityManager->flush();
                 }
+                $entityManager->flush();
 
+                // --- DEBUT LOGIQUE EMAIL (Commun à tous) ---
+                // On prépare le contenu HTML à partir de ton template Twig
+                $html = $this->renderView('mail/orderConfirm.html.twig', [
+                    'order' => $order,
+                    'cart' => $data['cart']
+                ]);
+
+                $email = (new Email())
+                    ->from("contact-boutique@gmail.com")
+                    ->to($order->getEmail()) // L'adresse que l'utilisateur a tapée
+                    ->subject('Confirmation de réception de commande')
+                    ->html($html);
+
+                // On envoie le mail à Mailtrap
+                $mailer->send($email);
+                // --- FIN LOGIQUE EMAIL ---
+
+                // 3. Redirection selon le mode de paiement choisi
                 if ($order->isPayOnDelivery()) {
-                    // Mise à jour du contenu du panier en session
-                    $session->set('cart', []);
-
-                    $html = $this->renderView('mail/orderConfirm.html.twig', [ //crée une vue mail
-                        'order' => $order //on recupere le $order apres le flush donc on a toutes les infos
-
-                    ]);
-                    $email = (new Email()) //On importe la classe depuis Symfony\Component\Mime\Email;
-                        ->from("contact-artarcthe@gmail.com") //Adresse de l'expéditeur donc notre boutique ou vous mêmes
-                        // ->to('lea.santosfrancopro@gmail.com') //Adresse du receveur
-                        ->to($order->getEmail())
-                        ->subject('Confirmation de réception de commande') //Intitulé du mail
-                        ->html($html);
-                    $this->mailer->send($email);
-
-                    // Redirection vers la page du panier
+                    // Si paiement à la livraison
+                    $session->set('cart', []); // On vide le panier
                     return $this->redirectToRoute('app_order_message');
+                } else {
+                    // Si paiement par Stripe
+                    $paymentStripe = new StripePayment();
+                    $shippingCost = $order->getCity()->getShippingCost();
+                    $paymentStripe->startPayment($data, $shippingCost, $order->getId());
+
+                    $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
+                    return $this->redirect($stripeRedirectUrl);
                 }
-                // quand c'est false
-                $paymentStripe = new StripePayment(); //on importe notre service avec sa classe
-                $shippingCost = $order->getCity()->getShippingCost();
-                $paymentStripe->startPayment($data, $shippingCost, $order->getId()); //on importe le panier donc $data
-                $stripeRedirectUrl = $paymentStripe->getStripeRedirectUrl();
-                //dd( $stripeRedirectUrl);
-                return $this->redirect($stripeRedirectUrl);
             }
         }
 
+        // Affichage du formulaire si pas encore soumis
         return $this->render('order/index.html.twig', [
             'form' => $form->createView(),
             'total' => $data['total'],
@@ -138,10 +137,23 @@ class OrderController extends AbstractController
     public function isCompletedUpdate(Request $request, $id, OrderRepository $orderRepository, EntityManagerInterface $entityManager): Response
     {
         $order = $orderRepository->find($id);
+
+        if (!$order) {
+            throw $this->createNotFoundException('Commande introuvable');
+        }
+
+        // On marque la commande comme livrée/terminée
         $order->setIsCompleted(true);
+
+        // ON AJOUTE CETTE LIGNE : 
+        // On considère que si l'admin valide la commande, le paiement est encaissé
+        $order->setIsPaymentCompleted(true);
+
         $entityManager->flush();
-        $this->addFlash('success', 'Modification effectuée');
-        return $this->redirect($request->headers->get('referer')); //cela fait reference a la route precedent cette route ci
+
+        $this->addFlash('success', 'La commande a été marquée comme livrée et payée !');
+
+        return $this->redirect($request->headers->get('referer'));
     }
 
     #[Route('/editor/order/{id}/remove', name: 'app_orders_remove')]

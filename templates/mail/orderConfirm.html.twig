@@ -31,19 +31,19 @@
             <thead>
                 <tr>
                     <th>Nom du produit</th>
-                    <th>Description du produit</th>
+                    {# <th>Description du produit</th> #}
                     <th>Prix du produit</th>
                     <th>Quantité</th>
                     <th>Prix total</th>
                 </tr>
             </thead>
-            {% for product in order.orderProducts %}
+            {% for item in cart %}
                 <tr>
-                    <td>{{ product.product.name }}</td>
-                    <td>{{ product.product.description|slice(0,100)}}</td>
-                    <td>{{ product.product.price}} €</td>
-                    <td>{{ product.quantity}}</td>
-                    <td>{{ product.product.price*product.quantity}} €</td>
+                    <td>{{ item.product.name }}</td>
+                    {# <td>{{ item.product.description|slice(0,100)}}</td> #}
+                    <td>{{ item.product.price}} €</td>
+                    <td>{{ item.quantity}}</td>
+                    <td>{{ item.product.price*item.quantity}} €</td>
                 </tr>
             {% endfor %}
         </table>
