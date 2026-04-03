@@ -37,11 +37,13 @@ jobs:
         echo "APP_SECRET=abcdef1234567890" >> .env
         echo "DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db" >> .env
         echo "DEFAULT_URI=http://localhost" >> .env
-    # -----------------------------------------------
+        echo "MESSENGER_TRANSPORT_DSN=doctrine://default?auto_setup=0" >> .env
 
     - name: Install dependencies
       run: composer install --prefer-dist --no-progress
 
+    - name: Create Database Schema
+      run: php bin/console doctrine:schema:update --force --env=test
+
     - name: Run PHPUnit tests
-      run: |
-        vendor/bin/phpunit --colors=always
+      run: vendor/bin/phpunit --colors=always
