@@ -36,6 +36,7 @@ jobs:
         echo "APP_ENV=test" > .env
         echo "APP_SECRET=abcdef1234567890" >> .env
         echo "DATABASE_URL=sqlite:///%kernel.project_dir%/var/data.db" >> .env
+        echo "DEFAULT_URI=http://localhost" >> .env
     # -----------------------------------------------
 
     - name: Install dependencies
