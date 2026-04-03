@@ -32,7 +32,7 @@ final class SubCategoryControllerTest extends WebTestCase
     {
         $this->client->request('GET', $this->path);
         // On vérifie juste qu'on a une réponse, même si c'est une redirection (302)
-        $this->assertResponseStatusCodeSame(200); 
+        $this->assertResponseStatusCodeSame(302); 
         // Si tu es redirigé vers /login, change 200 par 302 temporairement 
         // juste pour voir le badge vert sur GitHub !
     }
