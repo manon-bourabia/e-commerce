@@ -13,7 +13,7 @@ final class SubCategoryControllerTest extends WebTestCase
     private KernelBrowser $client;
     private EntityManagerInterface $manager;
     private EntityRepository $subCategoryRepository;
-    private string $path = '/sub/category/';
+    private string $path = '/sub/category';
 
     protected function setUp(): void
     {

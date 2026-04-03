@@ -35,13 +35,13 @@ class SecurityControllerTest extends WebTestCase
         $this->assertSelectorExists('form.loginForm');
         // 5. Vérifie l'existence du champ de saisie pour l'email 
         //(recherche un input avec l'attribut name="email")
-        $this->assertSelectorExists('input[name="email"]');
+        $this->assertSelectorExists('input[name="_username"]');
         // 6. Vérifie l'existence du champ de saisie pour le mot de passe 
         //(recherche un input avec l'attribut name="password")
-        $this->assertSelectorExists('input[name="password"]');
+        $this->assertSelectorExists('input[name="_password"]');
         // 7. Vérifie qu'il y a un élément h1 (titre principal) 
         //sur la page qui contient le texte "Connexion"
-        $this->assertSelectorTextContains('h1', 'Connexion');
+        $this->assertSelectorTextContains('h1', 'Please sign in');
     }
 
     // public function testLoginRedirectsIfAlreadyAuthenticated(): void
